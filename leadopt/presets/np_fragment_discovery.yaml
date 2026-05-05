@@ -1,0 +1,117 @@
+preset_version: 1
+name: np_fragment_discovery
+
+actions:
+  operators:
+    # Primary: BRICS single-cut truncation
+    - type: FragmentationOperator
+      params:
+        method: brics
+        mode: contains_anchor
+        # Chosen to match the sanity ligand; update per NP series
+        anchor_smarts: "c1ccccc1"
+        max_cuts_per_step: 1
+        min_heavy_atoms: 8
+        max_deleted_atoms: 80
+        max_fragments: 1
+        log_library_version: true
+
+    # Conservative sidechain pruning (ring-safe)
+    - type: RingSubstituentDelete
+      params:
+        max_deleted_atoms: 35
+        min_heavy_atoms: 6
+        max_fragments: 1
+
+    # Small conservative edits (optional; keep minimal)
+    - type: AddSubstituent
+      params:
+        library: medchem_v1
+        include_library_version_in_payload: true
+    - type: RGroupSwap
+      params:
+        max_sidechain_heavy_atoms: 12
+        library: medchem_v1
+        include_library_version_in_payload: true
+
+  # Action legality gating constraint (opt-in via this preset)
+  legality_constraint:
+    type: ProtectedCoreConstraint
+    params:
+      core_smarts: "c1ccccc1"
+      require_match: true
+      library_version: protected_core_v1
+
+  max_steps: 8
+  rules:
+    ban_motifs: true
+    use_pains: false
+    use_brenk: false
+    use_nih: false
+    max_mw: 650.0
+    max_logp: 6.5
+
+constraints:
+  # Keep the core present (margin) for logging/penalty; gating is above.
+  - type: ProtectedCoreConstraint
+    params:
+      core_smarts: "c1ccccc1"
+      require_match: false
+      library_version: protected_core_v1
+
+  - type: ChargeConstraint
+    params:
+      min_charge: -1
+      max_charge: 1
+  - type: ElementConstraint
+    params:
+      allowed_elements: ["H", "C", "N", "O", "S", "F", "Cl", "Br", "I", "P"]
+  - type: RingCountConstraint
+    params:
+      max_rings: 10
+  - type: HBDHBAConstraint
+    params:
+      max_hbd: 4
+      max_hba: 10
+  - type: ReactiveGroupConstraint
+    params:
+      library_version: reactive_smarts_v1
+
+scoring:
+  type: DockingScorer
+  params:
+    engine: mock
+    protocol: standard
+    receptor_path: "data/receptors/example_receptor.pdbqt"
+    box:
+      center: [0.0, 0.0, 0.0]
+      size: [20.0, 20.0, 20.0]
+    timeout_s: 30.0
+    seed: 0
+    params:
+      exhaustiveness: 8
+
+reward:
+  mode: terminal
+  step_penalty: 0.01
+  compute_cost_weight: 0.0
+  constraint_penalty_weight: 1.0
+  bonus: 0.0
+
+training:
+  algorithm: ppo
+  total_timesteps: 100000
+  gamma: 0.99
+  seed: 0
+
+# Beam-search settings used by `leadopt beam` (deterministic generation)
+beam:
+  complexity_weight: 0.05
+  dock_drop_tolerance: null
+  hard_constraint_filter: true
+
+logging:
+  save_preset_yaml: true
+  log_git_commit: true
+  log_scorer_metadata: true
+  log_constraint_metadata: true

@@ -1,0 +1,83 @@
+preset_version: 1
+name: medchem_easy
+
+actions:
+  operators:
+    - type: PruneTerminal
+      params: {}
+    - type: AtomMutation
+      params: {}
+    - type: FunctionalGroupSwap
+      params: {}
+    - type: AddSubstituent
+      params:
+        # Default is medchem_v1; explicitly state for methods reproducibility.
+        library: medchem_v1
+        include_library_version_in_payload: true
+    - type: RGroupSwap
+      params:
+        max_sidechain_heavy_atoms: 12
+        library: medchem_v1
+        include_library_version_in_payload: true
+    - type: RingSubstituentDelete
+      params:
+        max_deleted_atoms: 25
+        min_heavy_atoms: 5
+        max_fragments: 1
+    - type: LinkerInsertCH2
+      params: {}
+    - type: LinkerDeleteCH2
+      params: {}
+
+  max_steps: 10
+  rules:
+    ban_motifs: true
+    use_pains: false
+    use_brenk: false
+    use_nih: false
+    max_mw: 650.0
+    max_logp: 6.5
+
+constraints:
+  - type: ChargeConstraint
+    params:
+      min_charge: -1
+      max_charge: 1
+  - type: ElementConstraint
+    params:
+      allowed_elements: ["H", "C", "N", "O", "S", "F", "Cl", "Br", "I", "P"]
+  - type: RingCountConstraint
+    params:
+      max_rings: 8
+  - type: HBDHBAConstraint
+    params:
+      max_hbd: 3
+      max_hba: 8
+  - type: ReactiveGroupConstraint
+    params:
+      # v1 minimal blacklist; keep explicit + versioned
+      library_version: reactive_smarts_v1
+
+scoring:
+  type: LegacyFunctionScorer
+  params:
+    function: "leadopt.score.qsar:example_qsar_score"
+
+reward:
+  mode: terminal
+  step_penalty: 0.01
+  compute_cost_weight: 0.0
+  constraint_penalty_weight: 1.0
+  bonus: 0.0
+
+training:
+  algorithm: ppo
+  total_timesteps: 200000
+  gamma: 0.99
+  seed: 0
+
+logging:
+  save_preset_yaml: true
+  log_git_commit: true
+  log_scorer_metadata: true
+  log_constraint_metadata: true

@@ -1,0 +1,27 @@
+preset_version: 1
+preset_name: "operator_tier_easy"
+
+operators:
+  - name: AddSubstituent
+    params:
+      library: "medchem_v1"
+
+  - name: RGroupSwap
+    params:
+      library: "medchem_v1"
+
+  - name: RingSubstituentDelete
+
+  - name: LinkerInsertCH2
+  - name: LinkerDeleteCH2
+
+constraints:
+  - name: MedchemFilters
+    params:
+      min_heavy_atoms: 8
+      max_heavy_atoms: 50
+      allow_charge_range: [-1, 1]
+
+  - name: SizeConstraint
+    params:
+      max_heavy_atoms: 60

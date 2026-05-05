@@ -1,0 +1,56 @@
+preset_version: 1
+name: docking
+
+actions:
+  operators:
+    - type: PruneTerminal
+      params: {}
+    - type: FunctionalGroupSwap
+      params: {}
+    - type: AddSubstituent
+      params: {}
+  max_steps: 10
+  rules:
+    ban_motifs: true
+    use_pains: false
+    use_brenk: false
+    use_nih: false
+    max_mw: 650.0
+    max_logp: 6.5
+
+constraints:
+  - type: SimilarityConstraint
+    params:
+      lead_smiles: "CCO"
+      min_sim: 0.25
+
+scoring:
+  type: LegacyFunctionScorer
+  params:
+    function: "leadopt.score.docking:example_docking_score"
+    metadata:
+      receptor: "data/receptors/protein.pdbqt"
+      grid_box: [0.0, 0.0, 0.0, 20.0, 20.0, 20.0]
+      reference_ligand: "data/ligands/ref.sdf"
+      alignment:
+        enabled: false
+        method: "none"
+
+reward:
+  mode: terminal
+  step_penalty: 0.01
+  compute_cost_weight: 0.0
+  constraint_penalty_weight: 1.0
+  bonus: 0.0
+
+training:
+  algorithm: ppo
+  total_timesteps: 200000
+  gamma: 0.99
+  seed: 0
+
+logging:
+  save_preset_yaml: true
+  log_git_commit: true
+  log_scorer_metadata: true
+  log_constraint_metadata: true

@@ -1,0 +1,200 @@
+library_version: medchem_smirks_v2
+transforms:
+  - name: alkane_to_alkene
+    smirks: "[C:1]-[C:2]>>[C:1]=[C:2]"
+    notes: Simple dehydrogenation of saturated methylene pair to alkene.
+  - name: alkane_to_alkyne
+    smirks: "[C:1]-[C:2]>>[C:1]#[C:2]"
+    notes: Simple dehydrogenation of saturated methylene pair to alkyne.
+  - name: alkene_to_alkyne
+    smirks: "[C:1]=[C:2]>>[C:1]#[C:2]"
+    notes: Dehydrogenation of alkene to alkyne.
+  - name: alkene_to_alkane
+    smirks: "[C:1]=[C:2]>>[C:1]-[C:2]"
+    notes: Hydrogenation of alkene to alkane.
+  - name: alkyne_to_alkene
+    smirks: "[C:1]#[C:2]>>[C:1]=[C:2]"
+    notes: Hydrogenation of alkyne to alkene.
+  - name: alkyne_to_alkane
+    smirks: "[C:1]#[C:2]>>[C:1]-[C:2]"
+    notes: Hydrogenation of alkyne to alkane.
+  - name: aryl_F_to_Cl
+    smirks: "[c:1][F:2]>>[c:1][Cl:2]"
+    notes: Aryl halogen scan F->Cl.
+  - name: aryl_F_to_Br
+    smirks: "[c:1][F:2]>>[c:1][Br:2]"
+    notes: Aryl halogen scan F->Br.
+  - name: aryl_F_to_I
+    smirks: "[c:1][F:2]>>[c:1][I:2]"
+    notes: Aryl halogen scan F->I.
+  - name: aryl_Cl_to_F
+    smirks: "[c:1][Cl:2]>>[c:1][F:2]"
+    notes: Aryl halogen scan Cl->F.
+  - name: aryl_Cl_to_Br
+    smirks: "[c:1][Cl:2]>>[c:1][Br:2]"
+    notes: Aryl halogen scan Cl->Br.
+  - name: aryl_Cl_to_I
+    smirks: "[c:1][Cl:2]>>[c:1][I:2]"
+    notes: Aryl halogen scan Cl->I.
+  - name: aryl_Br_to_F
+    smirks: "[c:1][Br:2]>>[c:1][F:2]"
+    notes: Aryl halogen scan Br->F.
+  - name: aryl_Br_to_Cl
+    smirks: "[c:1][Br:2]>>[c:1][Cl:2]"
+    notes: Aryl halogen scan Br->Cl.
+  - name: aryl_Br_to_I
+    smirks: "[c:1][Br:2]>>[c:1][I:2]"
+    notes: Aryl halogen scan Br->I.
+  - name: aryl_I_to_F
+    smirks: "[c:1][I:2]>>[c:1][F:2]"
+    notes: Aryl halogen scan I->F.
+  - name: aryl_I_to_Cl
+    smirks: "[c:1][I:2]>>[c:1][Cl:2]"
+    notes: Aryl halogen scan I->Cl.
+  - name: aryl_I_to_Br
+    smirks: "[c:1][I:2]>>[c:1][Br:2]"
+    notes: Aryl halogen scan I->Br.
+  - name: phenyl_to_pyridine_pos1
+    smirks: "[c:1]1[c:2][c:3][c:4][c:5][c:6]1>>[n:1]1[c:2][c:3][c:4][c:5][c:6]1"
+    notes: Single ring N insertion to pyridine at position 1.
+  - name: pyridine_pos1_to_phenyl
+    smirks: "[n:1]1[c:2][c:3][c:4][c:5][c:6]1>>[c:1]1[c:2][c:3][c:4][c:5][c:6]1"
+    notes: Remove single ring N at position 1.
+  - name: phenyl_to_pyridine_pos2
+    smirks: "[c:1]1[c:2][c:3][c:4][c:5][c:6]1>>[c:1]1[n:2][c:3][c:4][c:5][c:6]1"
+    notes: Single ring N insertion to pyridine at position 2.
+  - name: pyridine_pos2_to_phenyl
+    smirks: "[c:1]1[n:2][c:3][c:4][c:5][c:6]1>>[c:1]1[c:2][c:3][c:4][c:5][c:6]1"
+    notes: Remove single ring N at position 2.
+  - name: phenyl_to_pyridine_pos3
+    smirks: "[c:1]1[c:2][c:3][c:4][c:5][c:6]1>>[c:1]1[c:2][n:3][c:4][c:5][c:6]1"
+    notes: Single ring N insertion to pyridine at position 3.
+  - name: pyridine_pos3_to_phenyl
+    smirks: "[c:1]1[c:2][n:3][c:4][c:5][c:6]1>>[c:1]1[c:2][c:3][c:4][c:5][c:6]1"
+    notes: Remove single ring N at position 3.
+  - name: phenyl_to_pyridine_pos4
+    smirks: "[c:1]1[c:2][c:3][c:4][c:5][c:6]1>>[c:1]1[c:2][c:3][n:4][c:5][c:6]1"
+    notes: Single ring N insertion to pyridine at position 4.
+  - name: pyridine_pos4_to_phenyl
+    smirks: "[c:1]1[c:2][c:3][n:4][c:5][c:6]1>>[c:1]1[c:2][c:3][c:4][c:5][c:6]1"
+    notes: Remove single ring N at position 4.
+  - name: phenyl_to_pyridine_pos5
+    smirks: "[c:1]1[c:2][c:3][c:4][c:5][c:6]1>>[c:1]1[c:2][c:3][c:4][n:5][c:6]1"
+    notes: Single ring N insertion to pyridine at position 5.
+  - name: pyridine_pos5_to_phenyl
+    smirks: "[c:1]1[c:2][c:3][c:4][n:5][c:6]1>>[c:1]1[c:2][c:3][c:4][c:5][c:6]1"
+    notes: Remove single ring N at position 5.
+  - name: phenyl_to_pyridine_pos6
+    smirks: "[c:1]1[c:2][c:3][c:4][c:5][c:6]1>>[c:1]1[c:2][c:3][c:4][c:5][n:6]1"
+    notes: Single ring N insertion to pyridine at position 6.
+  - name: pyridine_pos6_to_phenyl
+    smirks: "[c:1]1[c:2][c:3][c:4][c:5][n:6]1>>[c:1]1[c:2][c:3][c:4][c:5][c:6]1"
+    notes: Remove single ring N at position 6.
+  - name: nitrile_to_amide
+    smirks: "[C:1]#[N:2]>>[C:1](=O)[N:2]"
+    notes: Nitrile hydration to amide (neutral).
+  - name: amide_to_nitrile
+    smirks: "[C:1](=[O:2])-[N;H2:3]>>[C:1]#[N:3]"
+    notes: Amide dehydration to nitrile (neutral).
+  - name: carboxylic_acid_to_methyl_ester
+    smirks: "[C:1](=[O:2])[O:3]>>[C:1](=[O:2])[O:3]C"
+    notes: Convert carboxylic acid to methyl ester.
+  - name: carboxylic_acid_to_ethyl_ester
+    smirks: "[C:1](=[O:2])[O:3]>>[C:1](=[O:2])[O:3]CC"
+    notes: Convert carboxylic acid to ethyl ester.
+  - name: carboxylic_acid_to_tBu_ester
+    smirks: "[C:1](=[O:2])[O:3]>>[C:1](=[O:2])[O:3]C(C)(C)C"
+    notes: Convert carboxylic acid to tert-butyl ester.
+  - name: methyl_ester_to_carboxylic_acid
+    smirks: "[C:1](=[O:2])[O:3][CH3:4]>>[C:1](=[O:2])[O:3]"
+    notes: Methyl ester to carboxylic acid.
+  - name: ethyl_ester_to_carboxylic_acid
+    smirks: "[C:1](=[O:2])[O:3][CH2:4][CH3:5]>>[C:1](=[O:2])[O:3]"
+    notes: Ethyl ester to carboxylic acid.
+  - name: amide_N_methylation
+    smirks: "[C:1](=[O:2])[N:3]>>[C:1](=[O:2])[N:3]C"
+    notes: Amide N-methylation (neutral).
+  - name: amide_N_demethylation
+    smirks: "[C:1](=[O:2])[N:3][CH3:4]>>[C:1](=[O:2])[N:3]"
+    notes: Remove N-methyl from amide.
+  - name: amide_N_ethylation
+    smirks: "[C:1](=[O:2])[N:3]>>[C:1](=[O:2])[N:3]CC"
+    notes: Amide N-ethylation (neutral).
+  - name: amide_N_deethylation
+    smirks: "[C:1](=[O:2])[N:3][CH2:4][CH3:5]>>[C:1](=[O:2])[N:3]"
+    notes: Remove N-ethyl from amide.
+  - name: sulfonamide_N_methylation
+    smirks: "[S:1](=[O:2])(=[O:3])[N:4]>>[S:1](=[O:2])(=[O:3])[N:4]C"
+    notes: Sulfonamide N-methylation (neutral).
+  - name: sulfonamide_N_demethylation
+    smirks: "[S:1](=[O:2])(=[O:3])[N:4][CH3:5]>>[S:1](=[O:2])(=[O:3])[N:4]"
+    notes: Remove N-methyl from sulfonamide.
+  - name: sulfonamide_N_ethylation
+    smirks: "[S:1](=[O:2])(=[O:3])[N:4]>>[S:1](=[O:2])(=[O:3])[N:4]CC"
+    notes: Sulfonamide N-ethylation (neutral).
+  - name: sulfonamide_N_deethylation
+    smirks: "[S:1](=[O:2])(=[O:3])[N:4][CH2:5][CH3:6]>>[S:1](=[O:2])(=[O:3])[N:4]"
+    notes: Remove N-ethyl from sulfonamide.
+  - name: amide_O_to_S_thioamide
+    smirks: "[C:1](=[O:2])[N:3]>>[C:1](=[S:2])[N:3]"
+    notes: Amide O->S thioamide.
+  - name: thioamide_S_to_O_amide
+    smirks: "[C:1](=[S:2])[N:3]>>[C:1](=[O:2])[N:3]"
+    notes: Thioamide S->O amide.
+  - name: ketone_to_oxime
+    smirks: "[C:1](=[O:2])[C:3]>>[C:1](=[N:4]O)[C:3]"
+    notes: Ketone to oxime.
+  - name: oxime_to_ketone
+    smirks: "[C:1](=[N:4][O:2])[C:3]>>[C:1](=[O:2])[C:3]"
+    notes: Oxime to ketone.
+  - name: alcohol_to_fluoride
+    smirks: "[C:1][OX2H:2]>>[C:1][F:2]"
+    notes: Replace alcohol with fluoride (vector-preserving, simplified).
+  - name: alcohol_to_chloride
+    smirks: "[C:1][OX2H:2]>>[C:1][Cl:2]"
+    notes: Replace alcohol with chloride (vector-preserving, simplified).
+  - name: alcohol_to_ether
+    smirks: "[C:1][OX2H:2]>>[C:1][O:2][C:3]"
+    notes: Replace alcohol with chloride (vector-preserving, simplified).
+  - name: fluoride_to_alcohol
+    smirks: "[C:1][F:2]>>[C:1][O:2]"
+    notes: Replace fluoride with alcohol (simplified).
+  - name: ether_to_alcohol
+    smirks: "[C:1][O:2][C:3]>>[C:1][O:2]"
+    notes: Ether to alcohol.
+  - name: ether_to_thioether
+    smirks: "[C:1][O:2][C:3]>>[C:1][S:2][C:3]"
+    notes: Ether to thioether swap.
+  - name: thioether_to_ether
+    smirks: "[C:1][S:2][C:3]>>[C:1][O:2][C:3]"
+    notes: Thioether to ether swap.
+  - name: thioether_to_sulfoxide
+    smirks: "[C:1][S:2][C:3]>>[C:1][S:2](=O)[C:3]"
+    notes: Thioether oxidation to sulfoxide.
+  - name: sulfoxide_to_thioether
+    smirks: "[C:1][S:2](=[O:4])[C:3]>>[C:1][S:2][C:3]"
+    notes: Sulfoxide reduction to thioether.
+  - name: aryl_OMe_to_OH
+    smirks: "[c:1][O:2][CH3:3]>>[c:1][O:2]"
+    notes: Aryl O-demethylation to phenol.
+  - name: aryl_OH_to_OMe
+    smirks: "[c:1][O:2]>>[c:1][O:2]C"
+    notes: Aryl O-methylation to anisole-like ether.
+  - name: aryl_methyl_to_ethyl
+    smirks: "[c:1][CH3:2]>>[c:1][CH2:2][CH3:3]"
+    notes: Aryl methyl to ethyl scan.
+  - name: aryl_ethyl_to_methyl
+    smirks: "[c:1][CH2:2][CH3:3]>>[c:1][CH3:2]"
+    notes: Aryl ethyl to methyl scan.
+  - name: aryl_methyl_to_isopropyl
+    smirks: "[c:1][CH3:2]>>[c:1][C:2]([CH3:3])[CH3:4]"
+    notes: Aryl methyl to isopropyl scan.
+  - name: aryl_isopropyl_to_methyl
+    smirks: "[c:1][C:2]([CH3:3])[CH3:4]>>[c:1][CH3:2]"
+    notes: Aryl isopropyl to methyl scan.
+  - name: aryl_methyl_to_trifluoromethyl
+    smirks: "[c:1][CH3:2]>>[c:1][C:2]([F:3])([F:4])[F:5]"
+    notes: Aryl methyl to CF3 scan.
+  - name: aryl_trifluoromethyl_to_methyl
+    smirks: "[c:1][C:2]([F:3])([F:4])[F:5]>>[c:1][CH3:2]"
+    notes: Aryl CF3 to methyl scan.

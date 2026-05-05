@@ -1,0 +1,76 @@
+preset_version: 1
+name: docking_aligned_local
+
+actions:
+  operators:
+    - type: PruneTerminal
+      params: {}
+    - type: AtomMutation
+      params: {}
+  max_steps: 6
+  rules:
+    ban_motifs: true
+    use_pains: false
+    use_brenk: false
+    use_nih: false
+    max_mw: 650.0
+    max_logp: 6.5
+
+constraints:
+  - type: SizeConstraint
+    params:
+      max_heavy_atoms: 60
+
+scoring:
+  type: DockingScorer
+  params:
+    engine: mock
+    engine_version: "0"
+    protocol: aligned_local
+    receptor_path: data/receptors/example_receptor.pdbqt
+    reference_ligand_path: data/ligands/reference_ligand.sdf
+    # reference_conformer: 0
+
+    # For Stage 1, box is still required by the current DockingScorer runtime guards.
+    # Later stages will optionally derive a tight box from the aligned pose.
+    box:
+      center: [0.0, 0.0, 0.0]
+      size: [6.0, 6.0, 6.0]
+
+    cache_dir: runs/_docking_cache
+    budget: 100
+    seed: 0
+    timeout_s: 30.0
+
+    alignment:
+      method: mcs
+      timeout_s: 5.0
+
+    anchor:
+      # When true (default), DockingScorer derives a tight box from the aligned pose and overrides `box`.
+      derive_box: true
+      box_padding_A: 1.5
+      box_min_A: 6.0
+
+    local_opt:
+      max_steps: 50
+      torsion_minimize: true
+
+reward:
+  mode: terminal
+  step_penalty: 0.01
+  compute_cost_weight: 0.0
+  constraint_penalty_weight: 1.0
+  bonus: 0.0
+
+training:
+  algorithm: ppo
+  total_timesteps: 200000
+  gamma: 0.99
+  seed: 0
+
+logging:
+  save_preset_yaml: true
+  log_git_commit: true
+  log_scorer_metadata: true
+  log_constraint_metadata: true

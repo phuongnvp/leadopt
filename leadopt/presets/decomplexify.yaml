@@ -1,0 +1,49 @@
+preset_version: 1
+name: decomplexify
+
+actions:
+  operators:
+    - type: PruneTerminal
+      params: {}
+    - type: DeleteSubtree
+      params:
+        max_deleted_atoms: 12
+  max_steps: 12
+  rules:
+    ban_motifs: true
+    max_mw: 650.0
+
+constraints:
+  - type: SimilarityConstraint
+    params:
+      lead_smiles: "CCc1ccccc1"
+      min_sim: 0.35
+  - type: SizeConstraint
+    params:
+      max_heavy_atoms: 45
+
+scoring:
+  type: QSARScorer
+  params:
+    objective: "qed"
+
+reward:
+  mode: delta
+  gamma: 0.99
+  step_penalty: 0.01
+  constraint_penalty_weight: 1.0
+  compute_cost_weight: 0.0
+  bonus: 0.0
+  complexity_weight: 0.02
+
+training:
+  algorithm: ppo
+  total_timesteps: 200000
+  gamma: 0.99
+  seed: 0
+
+logging:
+  save_preset_yaml: true
+  log_git_commit: true
+  log_scorer_metadata: true
+  log_constraint_metadata: true

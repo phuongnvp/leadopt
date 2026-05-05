@@ -1,0 +1,108 @@
+preset_version: 1
+name: medchem_quality_tier4
+
+# Tier 4.5 preset: action-space quality filters (opt-in) + SMIRKS v2 + positional scan.
+# Defaults of operators remain unchanged; this preset explicitly enables filtering knobs.
+
+actions:
+  operators:
+    # Conservative core edits
+    - type: PruneTerminal
+      params: {}
+    - type: DeleteSubtree
+      params:
+        max_deleted_atoms: 12
+
+    # Tier 4.4 aromatic positional scan (strict mono-substituted aromatic rings)
+    - type: AromaticPositionalScan
+      params:
+        min_heavy_atoms: 5
+        allow_charge_change: false
+
+    # Tier 3.3 aromatic substituent swap + Tier 4.1 quality knobs
+    - type: AromaticSubstituentSwap
+      params: {}
+
+    # Tier 1.1 / Tier 4.1 additions (quality knobs)
+    - type: RGroupSwap
+      params:
+        max_sidechain_heavy_atoms: 12
+        library: medchem_v1
+        include_library_version_in_payload: true
+        max_actions_per_bond: 24
+        deduplicate_products: true
+
+    - type: AddSubstituent
+      params:
+        library: medchem_v1
+        include_library_version_in_payload: true
+        max_actions_per_atom: 12
+        deduplicate_products: true
+
+    # Tier 3.1 linker atom swap
+    - type: LinkerAtomSwap
+      params:
+        allow_charge_change: false
+
+    # Tier 4.3 SMIRKS library v2 (opt-in)
+    - type: SmirksLibraryOperator
+      params:
+        library_path: leadopt/data/smirks/medchem_smirks_v2.yaml
+        min_heavy_atoms: 5
+        require_single_fragment: true
+        allow_charge_change: false
+
+  max_steps: 10
+  rules:
+    ban_motifs: true
+    use_pains: false
+    use_brenk: false
+    use_nih: false
+    max_mw: 650.0
+    max_logp: 6.5
+
+constraints:
+  # Tier 1.3 medchem filter constraints (opt-in)
+  - type: ChargeConstraint
+    params:
+      min_charge: -1
+      max_charge: 1
+  - type: ElementConstraint
+    params:
+      allowed_elements: ["H", "C", "N", "O", "S", "F", "Cl", "Br", "I", "P"]
+  - type: RingCountConstraint
+    params:
+      max_rings: 10
+  - type: HBDHBAConstraint
+    params:
+      max_hbd: 4
+      max_hba: 10
+  - type: ReactiveGroupConstraint
+    params:
+      library_version: reactive_smarts_v1
+
+scoring:
+  type: QSARScorer
+  params:
+    objective: "qed"
+
+reward:
+  mode: delta
+  gamma: 0.99
+  step_penalty: 0.01
+  constraint_penalty_weight: 1.0
+  compute_cost_weight: 0.0
+  bonus: 0.0
+  complexity_weight: 0.02
+
+training:
+  algorithm: ppo
+  total_timesteps: 200000
+  gamma: 0.99
+  seed: 0
+
+logging:
+  save_preset_yaml: true
+  log_git_commit: true
+  log_scorer_metadata: true
+  log_constraint_metadata: true

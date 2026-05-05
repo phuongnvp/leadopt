@@ -1,0 +1,90 @@
+preset_version: 1
+name: multi_objective
+
+actions:
+  operators:
+    - type: PruneTerminal
+      params: {}
+    - type: AtomMutation
+      params: {}
+  max_steps: 6
+  rules:
+    ban_motifs: true
+    use_pains: false
+    use_brenk: false
+    use_nih: false
+    max_mw: 650.0
+    max_logp: 6.5
+
+constraints:
+  - type: SizeConstraint
+    params:
+      max_heavy_atoms: 60
+
+scoring:
+  type: composite
+  params:
+    aggregation:
+      mode: weighted_sum
+      weights:
+        qsar: 1.0
+        mpo: 1.0
+        docking: 0.2
+    scorers:
+      - name: qsar
+        type: QSARScorer
+        params:
+          objective: qed
+          version: "0"
+
+      - name: mpo
+        type: MPOScorer
+        params:
+          properties:
+            - name: qed
+              weight: 0.5
+              transform: { type: identity, params: {} }
+            - name: mw
+              weight: 0.3
+              transform:
+                { type: triangle, params: { target: 350.0, tolerance: 150.0 } }
+            - name: logp
+              weight: 0.2
+              transform:
+                { type: triangle, params: { target: 2.5, tolerance: 2.0 } }
+          aggregation: weighted_sum
+          version_override: "0"
+
+      - name: docking
+        type: DockingScorer
+        params:
+          engine: mock
+          engine_version: "0"
+          protocol: standard
+          receptor_path: data/receptors/example_receptor.pdbqt
+          box:
+            center: [0.0, 0.0, 0.0]
+            size: [20.0, 20.0, 20.0]
+          cache_dir: runs/_docking_cache_mock
+          budget: 100
+          seed: 0
+          timeout_s: 60.0
+
+reward:
+  mode: terminal
+  step_penalty: 0.01
+  compute_cost_weight: 0.0
+  constraint_penalty_weight: 1.0
+  bonus: 0.0
+
+training:
+  algorithm: ppo
+  total_timesteps: 200000
+  gamma: 0.99
+  seed: 0
+
+logging:
+  save_preset_yaml: true
+  log_git_commit: true
+  log_scorer_metadata: true
+  log_constraint_metadata: true

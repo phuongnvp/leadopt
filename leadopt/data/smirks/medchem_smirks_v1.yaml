@@ -1,0 +1,65 @@
+library_version: "medchem_smirks_v1"
+
+# Determinism: transforms are applied in file order (index) and matches are sorted.
+# Requirement: one-reactant only, and ALL reactant atoms must have atom-map numbers.
+
+transforms:
+  # ------------------------------
+  # Amide edits (safe, substituent-preserving)
+  # ------------------------------
+  - name: "amide_N_methylation"
+    smirks: "[C:1](=[O:2])[N:3]>>[C:1](=[O:2])[N:3]C"
+    notes: "Conservative amide N-methylation (neutral)."
+
+  - name: "amide_N_demethylation"
+    smirks: "[C:1](=[O:2])[N:3][CH3:4]>>[C:1](=[O:2])[N:3]"
+    notes: "Remove a single N-methyl from an amide (neutral)."
+
+  - name: "reverse_amide"
+    smirks: "[C:1](=[O:2])[N:3]>>[N:3][C:1](=[O:2])"
+    notes: "Reverse amide connectivity (directional H-bond pattern)."
+
+  - name: "amide_O_to_S_thioamide"
+    smirks: "[C:1](=[O:2])[N:3]>>[C:1](=[S:2])[N:3]"
+    notes: "Amide O->S (thioamide) bioisostere; preserves substituents."
+
+  - name: "thioamide_S_to_O_amide"
+    smirks: "[C:1](=[S:2])[N:3]>>[C:1](=[O:2])[N:3]"
+    notes: "Thioamide S->O back to amide; preserves substituents."
+
+  # ------------------------------
+  # Sulfonamide edits (safe)
+  # ------------------------------
+  - name: "sulfonamide_N_methylation"
+    smirks: "[S:1](=[O:2])(=[O:3])[N:4]>>[S:1](=[O:2])(=[O:3])[N:4]C"
+    notes: "Sulfonamide N-methylation (neutral)."
+
+  - name: "sulfonamide_N_demethylation"
+    smirks: "[S:1](=[O:2])(=[O:3])[N:4][CH3:5]>>[S:1](=[O:2])(=[O:3])[N:4]"
+    notes: "Remove a single N-methyl from a sulfonamide (neutral)."
+
+  # ------------------------------
+  # Carbonyl functional transforms
+  # ------------------------------
+  - name: "ketone_to_oxime"
+    smirks: "[C:1](=[O:2])[C:3]>>[C:1](=[N:4]O)[C:3]"
+    notes: "Ketone to oxime (neutral)."
+
+  - name: "oxime_to_ketone"
+    smirks: "[C:1](=[N:4][O:2])[C:3]>>[C:1](=[O:2])[C:3]"
+    notes: "Oxime to ketone (neutral)."
+
+  - name: "nitrile_to_amide"
+    smirks: "[C:1]#[N:2]>>[C:1](=O)[N:2]"
+    notes: "Nitrile hydration to amide (neutral)."
+
+  # ------------------------------
+  # Aromatic bioisosteres (simple)
+  # ------------------------------
+  - name: "phenyl_to_pyridine"
+    smirks: "[c:1]1[c:2][c:3][c:4][c:5][c:6]1>>[c:1]1[c:2][c:3][c:4][c:5][n:6]1"
+    notes: "Single N insertion in a phenyl ring to form pyridine (position-specific)."
+
+  - name: "pyridine_to_phenyl"
+    smirks: "[c:1]1[c:2][c:3][c:4][c:5][n:6]1>>[c:1]1[c:2][c:3][c:4][c:5][c:6]1"
+    notes: "Remove a single ring N to revert pyridine to phenyl."

@@ -1,0 +1,34 @@
+preset_version: 1
+preset_name: "operator_tier_medium"
+
+operators:
+  - name: AddSubstituent
+    params:
+      library: "medchem_v1"
+
+  - name: RGroupSwap
+    params:
+      library: "medchem_v1"
+
+  - name: RingSubstituentDelete
+
+  - name: LinkerInsertCH2
+  - name: LinkerDeleteCH2
+  - name: LinkerAtomSwap
+
+  - name: AromaticSubstituentSwap
+    params:
+      min_heavy_atoms: 5
+      allow_charge_change: false
+
+  - name: SmirksLibraryOperator
+    params:
+      allow_charge_change: false
+      min_heavy_atoms: 5
+
+constraints:
+  - name: MedchemFilters
+    params:
+      min_heavy_atoms: 6
+      max_heavy_atoms: 60
+      allow_charge_range: [-1, 1]
