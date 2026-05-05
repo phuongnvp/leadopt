@@ -1,0 +1,38 @@
+{
+  "op2id": {
+    "<UNK>": 0,
+    "AddSubstituent": 1,
+    "AromaticPositionalScan": 2,
+    "AromaticSubstituentSwap": 3,
+    "AtomMutation": 4,
+    "AzaScanAromatic": 5,
+    "DeleteSubtree": 6,
+    "FragmentationOperator": 7,
+    "FunctionalGroupSwap": 8,
+    "LinkerAtomSwap": 9,
+    "LinkerDeleteCH2": 10,
+    "LinkerInsertCH2": 11,
+    "RGroupSwap": 12,
+    "RingSubstituentDelete": 13,
+    "SmirksLibraryOperator": 14,
+    "Terminate": 15
+  },
+  "tpl2id": {
+    "<UNK>": 0,
+    "AddSubstituent|": 1,
+    "AromaticPositionalScan|": 2,
+    "AromaticSubstituentSwap|": 3,
+    "AtomMutation|": 4,
+    "AzaScanAromatic|": 5,
+    "DeleteSubtree|": 6,
+    "FragmentationOperator|": 7,
+    "FunctionalGroupSwap|": 8,
+    "LinkerAtomSwap|": 9,
+    "LinkerDeleteCH2|": 10,
+    "LinkerInsertCH2|": 11,
+    "RGroupSwap|": 12,
+    "RingSubstituentDelete|": 13,
+    "SmirksLibraryOperator|": 14,
+    "Terminate|": 15
+  }
+}

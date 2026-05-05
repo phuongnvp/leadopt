@@ -1,0 +1,207 @@
+{
+  "constraints": {
+    "enabled": true,
+    "metadata": {
+      "constraints": [
+        {
+          "max_heavy_atoms": 55,
+          "max_rings": 8,
+          "max_rotors": 12,
+          "min_heavy_atoms": 12,
+          "min_rings": 0,
+          "min_rotors": 0,
+          "name": "SizeConstraint"
+        },
+        {
+          "max_charge": 1,
+          "min_charge": -1,
+          "name": "ChargeConstraint"
+        },
+        {
+          "allowed_elements": [
+            "H",
+            "C",
+            "N",
+            "O",
+            "S",
+            "F",
+            "Cl",
+            "Br",
+            "I",
+            "P"
+          ],
+          "name": "ElementConstraint"
+        },
+        {
+          "max_rings": 8,
+          "min_rings": 0,
+          "name": "RingCountConstraint"
+        },
+        {
+          "max_hba": 10,
+          "max_hbd": 4,
+          "min_hba": 0,
+          "min_hbd": 0,
+          "name": "HBDHBAConstraint"
+        },
+        {
+          "library_version": "reactive_smarts_v1",
+          "name": "ReactiveGroupConstraint",
+          "patterns": [
+            {
+              "name": "acyl_halide",
+              "smarts": "[CX3](=O)[Cl,Br,I]"
+            },
+            {
+              "name": "sulfonyl_halide",
+              "smarts": "[SX4](=O)(=O)[Cl,Br,I]"
+            },
+            {
+              "name": "isocyanate",
+              "smarts": "N=C=O"
+            },
+            {
+              "name": "peroxide",
+              "smarts": "[OX2][OX2]"
+            },
+            {
+              "name": "azide",
+              "smarts": "[N-]=[N+]=N"
+            },
+            {
+              "name": "diazo",
+              "smarts": "[N]=[N+]=[C-]"
+            }
+          ]
+        }
+      ],
+      "fail_margin": -1000000.0,
+      "type": "ConstraintSuite"
+    }
+  },
+  "created_utc": "2026-03-20T17:59:56.096326+00:00",
+  "environment": {
+    "env_kwargs": {
+      "gamma": 0.99,
+      "include_terminate": true,
+      "max_steps": 10,
+      "require_connected": true,
+      "reward_mode": "delta",
+      "rule_config": {
+        "ban_motifs": true,
+        "forbid_radicals": true,
+        "max_abs_formal_charge": 1,
+        "max_hba": 12,
+        "max_hbd": 6,
+        "max_logp": 6.5,
+        "max_mw": 650.0,
+        "max_rings": 8,
+        "max_rot_bonds": 12,
+        "max_tpsa": 200.0,
+        "use_brenk": false,
+        "use_nih": false,
+        "use_pains": false
+      },
+      "seed": 4,
+      "step_penalty": 0.02
+    }
+  },
+  "extra": {
+    "cli": {
+      "out_dir": "Output",
+      "preset": "preset_qsar.yaml",
+      "seed_override": 42
+    },
+    "dataset": {
+      "limit": 0,
+      "path": "Dataset.csv",
+      "smiles_col": "Smiles",
+      "split_random_state": 0,
+      "split_test_size": 0.2
+    },
+    "model": {
+      "params": {
+        "emb_dim": 64,
+        "hidden_dim": 256,
+        "mp_steps": 4
+      },
+      "type": "MPNNPolicy"
+    }
+  },
+  "preset": {
+    "name": "QSAR",
+    "path": "preset_qsar.yaml"
+  },
+  "reproducibility": {
+    "cwd": "F:\\Phuong\\Project\\leadopt\\examples\\1. QSAR",
+    "env": {
+      "PYTHONHASHSEED": null
+    },
+    "git_commit": "unknown",
+    "leadopt_version": "0.1.0",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "python": "3.10.19 | packaged by Anaconda, Inc. | (main, Oct 21 2025, 16:41:31) [MSC v.1929 64 bit (AMD64)]",
+    "seed": 42
+  },
+  "reward": {
+    "reward_composer": {
+      "bonus_weight": 0.0,
+      "complexity_weight": 0.0,
+      "compute_cost_weight": 0.0,
+      "constraint_penalty_weight": 1.0,
+      "gamma": 0.99,
+      "mode": "delta",
+      "step_penalty": 0.02
+    },
+    "reward_composer_class": "RewardComposer"
+  },
+  "scoring": {
+    "scorer_class": "RealQSARScorer",
+    "scorer_metadata": {
+      "endpoint": "raw_pIC50",
+      "feature_config": {
+        "kind": "morgan",
+        "n_bits": 2048,
+        "radius": 2,
+        "use_chirality": true,
+        "use_features": false
+      },
+      "feature_sha256": "6948903ee0468ad59164447f8fe17abb349a916f218e6e7011059257b5685cae",
+      "feature_spec": "Morgan radius=2 nBits=2048 chirality=true features=false",
+      "input_mode": "fingerprint",
+      "model_family": "ECFP_regression",
+      "model_path": "qsar_model.pkl",
+      "model_sha256": null,
+      "name": "RealQSARScorer",
+      "notes": "Raw pIC50 regression scorer",
+      "objective_direction": "higher_is_better",
+      "rdkit_version": "2025.09.4",
+      "type": "qsar_real",
+      "version": "0"
+    }
+  },
+  "training": {
+    "meta": {
+      "algorithm": "ppo",
+      "beam": {
+        "beam_width": 32,
+        "complexity_weight": 0.0,
+        "dock_drop_tolerance": null,
+        "hard_constraint_filter": true,
+        "max_candidates": 256
+      },
+      "clip_ratio": 0.2,
+      "ent_coef": 0.01,
+      "gamma": 0.99,
+      "lam": 0.95,
+      "lr": 0.0003,
+      "max_grad_norm": 1.0,
+      "minibatch_size": 64,
+      "rollout_episodes": 64,
+      "seed": 4,
+      "total_timesteps": 500000,
+      "update_epochs": 4,
+      "vf_coef": 0.5
+    }
+  }
+}

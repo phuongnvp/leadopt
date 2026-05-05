@@ -1,0 +1,13 @@
+# Package data + sdist hygiene for leadopt.
+# Keep sdists reproducible and avoid shipping local build/run artifacts.
+
+prune build
+prune runs
+prune data
+
+# Include all in-package presets and data needed at runtime.
+recursive-include leadopt/presets *.yaml
+recursive-include leadopt/data *.yaml *.pdbqt
+
+# Standard hygiene
+global-exclude __pycache__ *.py[cod]

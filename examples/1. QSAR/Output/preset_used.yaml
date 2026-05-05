@@ -1,0 +1,167 @@
+preset_version: 1
+name: QSAR
+
+actions:
+  operators:
+    - type: AddSubstituent
+      params: {}
+    - type: AromaticPositionalScan
+      params: {}
+    - type: AromaticSubstituentSwap
+      params: {}
+    - type: AtomMutation
+      params: {}
+    - type: AzaScanAromatic
+      params: {}
+    - type: DeleteSubtree
+      max_deleted_atoms: 10
+    - type: FunctionalGroupSwap
+      params: {}
+    - type: LinkerAtomSwap
+      params:
+        allowed_atomic_nums: [6, 7, 8, 16]
+        min_heavy_atoms: 5
+        allow_charge_change: false
+        require_neutral_atom: true
+    - type: LinkerInsertCH2
+      params: {}
+    - type: LinkerDeleteCH2
+      params: {}
+    - type: RGroupSwap
+      params: {}
+    - type: SmirksLibraryOperator
+      params: {}
+    - type: RingSubstituentDelete
+      params:
+        max_deleted_atoms: 8
+        min_heavy_atoms: 8
+        max_fragments: 1
+    - type: FragmentationOperator
+      params:
+        mode: largest
+        anchor_smarts: null
+        max_cuts_per_step: 1
+        min_heavy_atoms: 10
+        max_deleted_atoms: 20
+        max_fragments: 1
+        method: brics
+        log_library_version: true
+
+  max_steps: 10
+
+  rules:
+    ban_motifs: true
+    use_pains: false
+    use_brenk: false
+    use_nih: false
+    max_mw: 650.0
+    max_logp: 6.5
+
+constraints:
+  - type: SizeConstraint
+    params:
+      min_heavy_atoms: 12
+      max_heavy_atoms: 55
+      min_rings: 0
+      max_rings: 8
+      min_rotors: 0
+      max_rotors: 12
+
+  - type: ChargeConstraint
+    params:
+      min_charge: -1
+      max_charge: 1
+
+  - type: ElementConstraint
+    params:
+      allowed_elements: ["H", "C", "N", "O", "S", "F", "Cl", "Br", "I", "P"]
+
+  - type: RingCountConstraint
+    params:
+      min_rings: 0
+      max_rings: 8
+
+  - type: HBDHBAConstraint
+    params:
+      min_hbd: 0
+      max_hbd: 4
+      min_hba: 0
+      max_hba: 10
+
+  - type: ReactiveGroupConstraint
+    params:
+      patterns:
+        - ["acyl_halide", "[CX3](=O)[Cl,Br,I]"]
+        - ["sulfonyl_halide", "[SX4](=O)(=O)[Cl,Br,I]"]
+        - ["isocyanate", "N=C=O"]
+        - ["peroxide", "[OX2][OX2]"]
+        - ["azide", "[N-]=[N+]=N"]
+        - ["diazo", "[N]=[N+]=[C-]"]
+      library_version: reactive_smarts_v1
+
+scoring:
+  type: qsar_real
+  params:
+    model:
+      path: qsar_model.pkl
+      input_mode: fingerprint
+    features:
+      kind: morgan
+      radius: 2
+      n_bits: 2048
+      use_chirality: true
+      use_features: false
+    cache:
+      enabled: true
+      dir: _qsar_cache
+    fail_objective: -1.0
+    extra_metadata:
+      endpoint: "raw_pIC50"
+      model_family: "ECFP_regression"
+      feature_spec: "Morgan radius=2 nBits=2048 chirality=true features=false"
+      objective_direction: "higher_is_better"
+      notes: "Raw pIC50 regression scorer"
+
+reward:
+  mode: delta
+  gamma: 0.99
+  step_penalty: 0.02
+  constraint_penalty_weight: 1.0
+  compute_cost_weight: 0.0
+  bonus: 0.0
+
+model:
+  type: MPNNPolicy
+  params:
+    hidden_dim: 256
+    mp_steps: 4
+    emb_dim: 64
+
+training:
+  algorithm: ppo
+  total_timesteps: 500000
+  gamma: 0.99
+  seed: 4
+
+  lam: 0.95
+  clip_ratio: 0.2
+  ent_coef: 0.01
+  vf_coef: 0.5
+  lr: 0.0003
+  max_grad_norm: 1.0
+  rollout_episodes: 64
+  update_epochs: 4
+  minibatch_size: 64
+
+beam:
+  beam_width: 32
+  max_candidates: 256
+  complexity_weight: 0.0
+  dock_drop_tolerance: null
+  hard_constraint_filter: true
+
+logging:
+  save_preset_yaml: true
+  log_git_commit: true
+  log_scorer_metadata: true
+  log_constraint_metadata: true

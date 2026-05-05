@@ -1,0 +1,90 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "leadopt"
+version = "0.1.0"
+description = "Reinforcement learning framework for lead optimization"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.24",
+  "pandas>=2.0",
+  "PyYAML>=6.0",
+]
+
+[project.scripts]
+leadopt = "leadopt.cli.main:main"
+leadopt-run = "leadopt.cli.run:main"
+leadopt-sanity = "leadopt.cli.sanity:main"
+
+[project.optional-dependencies]
+# Minimal, pure-pip installation is supported with the base dependencies above.
+# Chemistry + RL backends are opt-in because they are heavy and often installed via conda.
+chem = ["rdkit>=2023.09.1"]
+rl = ["torch>=2.0"]
+
+# Convenience: everything needed for typical use on conda/pip-mixed setups.
+all = ["rdkit>=2023.09.1", "torch>=2.0", "meeko>=0.5", "gemmi>=0.5"]
+
+dev = [
+  "pytest>=8.0",
+  "pre-commit>=3.6",
+  "ruff>=0.6",
+  "black>=24.0",
+  "isort>=5.13",
+  "pyupgrade>=3.15",
+]
+examples = ["tqdm>=4.67"]
+docs = ["mkdocs>=1.5", "mkdocs-material>=9.5"]
+# Optional dependency for ligand PDBQT preparation used by DockingScorer.
+docking = ["meeko>=0.5", "rdkit>=2023.09.1", "gemmi>=0.5"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+markers = [
+  "slow: marks tests as slow (deselect with '-m \"not slow\"')"
+]
+
+[tool.setuptools]
+include-package-data = true
+
+# IMPORTANT: prevents setuptools from treating sar_out/ as a top-level package.
+[tool.setuptools.packages.find]
+include = ["leadopt*"]
+exclude = ["sar_out*", "build*", "runs*", "data*", "docs*", "tests*", "scripts*"]
+
+# Ensure YAML presets ship with the package (wheel/sdist)
+[tool.setuptools.package-data]
+leadopt = [
+  "presets/*.yaml",
+  "presets/operator_tiers/*.yaml",
+  "data/smirks/*.yaml",
+  "data/receptors/*.pdbqt",
+]
+
+[tool.black]
+line-length = 88
+target-version = ["py310"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.ruff]
+target-version = "py310"
+line-length = 88
+exclude = [
+  "runs",
+  "docs",
+  "data",
+  "scripts",
+]
+
+[tool.ruff.lint]
+# Strict but Black-compatible baseline for package + tests.
+select = ["E", "F", "I"]
+ignore = [
+  "E501",  # Black handles line length; Ruff should not fight it.
+]
